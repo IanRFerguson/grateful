@@ -1,0 +1,6 @@
+prod.env
+*.pyc
+*.ipynb
+
+.vscode/
+service_accounts/
