@@ -3,4 +3,4 @@ prod.env
 *.ipynb
 
 .vscode/
-service_accounts/
+service_accounts/*.json
