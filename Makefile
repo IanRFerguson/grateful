@@ -7,6 +7,7 @@ ssh:
 		--zone=${GCP_ZONE_ID} 				\
 		${GCP_VM_NAME}				
 
+
 health-check:
 	@$(eval RESP=`curl --write-out 			\
 		"%{http_code}\n" 					\
