@@ -1,6 +1,9 @@
+import os
+
 from flask import Flask, render_template, request
 from klondike.bigquery.bigquery import BigQueryConnector
-from utils.twilio_helpers import handle_incoming_traffic
+from twilio.rest import Client
+from utils.twilio_helpers import handle_daily_reminder, handle_incoming_traffic
 
 ##########
 
@@ -43,4 +46,19 @@ def sms():
 
     handle_incoming_traffic(bq=BIGQUERY, traffic=TRAFFIC)
 
-    return "Ok"
+    return "OK"
+
+
+@api.route("/reminder", methods=["GET"])
+def reminder():
+    """
+    Determines whether or not Kane has sent in her gratitudes today
+    """
+
+    TWILIO_CLIENT = Client(
+        os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"]
+    )
+
+    handle_daily_reminder(twilio_client=TWILIO_CLIENT)
+
+    return "OK"
