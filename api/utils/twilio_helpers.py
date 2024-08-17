@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from klondike.bigquery.bigquery import BigQueryConnector
-from polars import DataFrame
+import polars as pl
 from twilio.rest import Client
 
 ##########
@@ -17,8 +17,8 @@ def handle_incoming_traffic(bq: BigQueryConnector, traffic: object) -> None:
     traffic_meta = {k: v for k, v in traffic.items()}
 
     # Reshape to Polars DataFrame object
-    traffic_meta_df = DataFrame(data=traffic_meta)
-    traffic_meta_df["_load_timestamp"] = datetime.now()
+    traffic_meta_df = pl.DataFrame(data=traffic_meta)
+    traffic_meta_df = traffic_meta_df.with_columns(_load_timestamp=datetime.now())
 
     # Get destination table name from env
     destination_table_name = (
