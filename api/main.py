@@ -33,7 +33,7 @@ def log():
     pass
 
 
-@api.route("/refreshCloud")
+@api.route("/refreshCloud", methods=["GET", "POST"])
 def refresh_cloud():
     "This route refreshes the word cloud on the landing page"
 
@@ -46,6 +46,10 @@ def refresh_cloud():
 
     generate_word_cloud(bq=BIGQUERY, outpath=OUTPATH)
 
+    if request.args.get("webhook"):
+        return "OK"
+
+    logger.debug("Redirecting to index...")
     return redirect(url_for("index"))
 
 
@@ -63,7 +67,7 @@ def sms():
 
     handle_incoming_traffic(bq=BIGQUERY, traffic=TRAFFIC)
 
-    return "OK"
+    return redirect(url_for("refresh_cloud", webhook=True))
 
 
 @api.route("/reminder", methods=["GET"])
