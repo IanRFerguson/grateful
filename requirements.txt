@@ -4,3 +4,4 @@ twilio
 klondike
 polars
 twilio==8.2.1
+wordcloud==1.9.3

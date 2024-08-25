@@ -2,6 +2,18 @@ build-app:
 	@docker compose up --build -d
 
 
+build-app-dev:
+	@docker compose up --build
+
+
+run-app:
+	@docker compose up -d
+
+
+run-app-dev:
+	@docker compose up
+
+
 ssh:
 	@gcloud compute ssh 						\
 		--project=${GCP_PROJECT_ID} 			\
