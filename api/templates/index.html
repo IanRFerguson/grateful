@@ -1,1 +1,12 @@
-<h1>Hello World</h1>
+{% extends "base.html" %}
+
+<body>
+    {% block content %}
+    <div class="landing">
+        <h2>Feeling Grateful</h2>
+        <div class="landingCloud">
+            <img src="{{ url_for('static', filename='wordCloud.png')}}">
+        </div>
+    </div>
+    {% endblock%}
+</body>

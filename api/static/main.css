@@ -1,0 +1,14 @@
+body {
+    text-align: center;
+    justify-content: center;
+    font-family: monospace;
+    list-style-type: none;
+}
+
+.landing {
+    padding: 10%;
+}
+
+.landingCloud {
+    padding: 1%;
+}

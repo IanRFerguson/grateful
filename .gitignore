@@ -4,3 +4,5 @@ prod.env
 
 .vscode/
 service_accounts/*.json
+*wordCloud.png
+*.DS_Store
