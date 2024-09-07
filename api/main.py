@@ -21,9 +21,6 @@ def index():
     This route displays a word-cloud of all affirmations
     """
 
-    if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
-        raise OSError("Missing GOOGLE_APPLICATION_CREDENTIALS env variable")
-
     return render_template("index.html")
 
 
