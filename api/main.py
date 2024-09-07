@@ -15,7 +15,7 @@ api.logger.handlers = logger.handlers
 api.logger.level = logger.level
 
 
-@api.route("/")
+@api.route("/", methods=["GET"])
 def index():
     """
     This route displays a word-cloud of all affirmations
