@@ -31,7 +31,7 @@ def refresh_cloud():
     NOW = datetime.now()
     logger.info(f"Refreshing the word cloud at {NOW}")
 
-    BIGQUERY = BigQueryConnector()
+    BIGQUERY = BigQueryConnector(bypass_env_variable=True)
     OUTPATH = os.path.join(api.static_folder, "wordCloud.png")
     logger.debug(f"Writing word cloud to {OUTPATH}...")
 
@@ -53,7 +53,7 @@ def sms():
     NOW = datetime.now()
     logger.info(f"Receiving an incoming text at {NOW}")
 
-    BIGQUERY = BigQueryConnector()
+    BIGQUERY = BigQueryConnector(bypass_env_variable=True)
     TRAFFIC = request.values
 
     handle_incoming_traffic(bq=BIGQUERY, traffic=TRAFFIC)
