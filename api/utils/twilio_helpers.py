@@ -58,7 +58,7 @@ def send_reminder_text(twilio_client: Client):
 It's getting late and it looks like you haven't
 sent in your gratitudes for the day. Respond to this text
 with five things you're grateful for.\n
-You can also visit http://35.208.132.187 any time to see
+You can also visit https://grateful-dev-928973048225.us-central1.run.app any time to see
 all the things that have brought you joy lately.\n
 Peace and love,
 The Gratitude Robot
