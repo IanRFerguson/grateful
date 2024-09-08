@@ -1,14 +1,23 @@
 body {
     text-align: center;
     justify-content: center;
-    font-family: monospace;
     list-style-type: none;
 }
 
 .landing {
-    padding: 10%;
+    padding: 5%;
 }
 
 .landingCloud {
     padding: 1%;
+}
+
+.gratitudeLanding {
+    padding: 3%;
+}
+
+.gratitudeTable {
+    width: 75%;
+    margin: 0 auto;
+    font-size: larger;
 }

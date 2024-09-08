@@ -7,7 +7,7 @@ from klondike import BigQueryConnector
 ##########
 
 
-def generate_word_cloud(bq: BigQueryConnector, outpath: str):
+def generate_word_cloud(bq: BigQueryConnector, outpath: str, phrases: bool = False):
     sql = f"""
     SELECT
         Body
@@ -18,12 +18,17 @@ def generate_word_cloud(bq: BigQueryConnector, outpath: str):
     tbl = bq.read_dataframe(sql=sql)
 
     # Break body responses into individual arrays
-    content = [x.split("\n") for x in tbl["Body"]]
+    cloud_gratitudes = [x.split("\n") for x in tbl["Body"]]
 
     # Combine arrays into a long string
-    content = " ".join(
-        [x.title().strip() for x in list(itertools.chain.from_iterable(content))]
-    )
+    word_bank = [
+        x.title().strip() for x in list(itertools.chain.from_iterable(cloud_gratitudes))
+    ]
+
+    if phrases:
+        word_bank = [x.replace(" ", "_") for x in word_bank]
+
+    content = " ".join(word_bank)
 
     # Create word cloud and save it
     wc = wordcloud.WordCloud(background_color="white", width=800, height=500).generate(

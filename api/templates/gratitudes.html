@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+<body>
+    {% block content %}
+    <div class="gratitudeLanding">
+        <h2>Things I'm Grateful For</h2>
+        <h4>
+            <a href="{{ url_for('index') }}">
+                Return Home
+            </a>
+        </h4>
+    </div>
+    <div class="gratitudeTable">
+        <table class="table">
+            <tr>
+                <th>Gratitude</th>
+                <th>Sent At</th>
+            </tr>
+            {% for response in responses %}
+            <tr>
+                <td>{{ response.value }}</td>
+                <td>{{ response.sent_at }}</td>
+            </tr>
+            {% endfor%}
+        </table>
+    </div>
+    {% endblock %}
+</body>
