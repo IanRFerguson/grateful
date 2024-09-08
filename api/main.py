@@ -77,3 +77,22 @@ def reminder():
     handle_daily_reminder(twilio_client=TWILIO_CLIENT)
 
     return "OK"
+
+
+@api.route("/test", methods=["GET"])
+def test():
+    """
+    Testing for CloudOps purposes
+    """
+
+    TWILIO_CLIENT = Client(
+        os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"]
+    )
+
+    TWILIO_CLIENT.messages.create(
+        to=os.environ["IANS_PHONE_NUMBER"],
+        from_=os.environ["TWILIO_PHONE_NUMBER"],
+        body="Howdy partner! This test worked",
+    )
+
+    return "OK"
