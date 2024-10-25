@@ -22,6 +22,9 @@ def index():
     This route displays a wordcloud of all gratitudes
     """
 
+    if not os.path.exists(os.path.join(api.static_folder, "wordCloud.png")):
+        return redirect(url_for("refresh_cloud"))
+
     return render_template("index.html")
 
 
