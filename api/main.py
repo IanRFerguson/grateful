@@ -107,7 +107,7 @@ def sms():
 
 
 @api.route("/reminder", methods=["GET"])
-def reminder(force: bool = True):
+def reminder():
     """
     Determines whether or not Kane has sent in her gratitudes today
     """
