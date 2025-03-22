@@ -2,12 +2,12 @@ import os
 from datetime import datetime
 
 from flask import Flask, redirect, render_template, request, url_for
-from klondike.bigquery.bigquery import BigQueryConnector
+from klondike.gcp.bigquery import BigQueryConnector
 from twilio.rest import Client
+from utils.data_helpers import get_all_gratitudes
 from utils.logger import logger
 from utils.twilio_helpers import handle_daily_reminder, handle_incoming_traffic
 from utils.word_cloud_helpers import generate_word_cloud
-from utils.data_helpers import get_all_gratitudes
 
 ##########
 
@@ -107,7 +107,7 @@ def sms():
 
 
 @api.route("/reminder", methods=["GET"])
-def reminder():
+def reminder(force: bool = True):
     """
     Determines whether or not Kane has sent in her gratitudes today
     """
@@ -119,7 +119,12 @@ def reminder():
         os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"]
     )
 
-    handle_daily_reminder(twilio_client=TWILIO_CLIENT)
+    force = request.args.get("force")
+
+    if force:
+        logger.debug("Force parameter supplied...")
+
+    handle_daily_reminder(twilio_client=TWILIO_CLIENT, force=force)
 
     return "OK"
 

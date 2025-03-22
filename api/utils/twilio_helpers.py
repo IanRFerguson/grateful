@@ -1,9 +1,11 @@
 import os
+import random
 from datetime import datetime
 
 import polars as pl
-from klondike.bigquery.bigquery import BigQueryConnector
+from klondike.gcp.bigquery import BigQueryConnector
 from twilio.rest import Client
+from utils.logger import logger
 
 ##########
 
@@ -31,7 +33,7 @@ def handle_incoming_traffic(bq: BigQueryConnector, traffic: object) -> None:
     )
 
 
-def handle_daily_reminder(twilio_client: Client) -> None:
+def handle_daily_reminder(twilio_client: Client, force: bool = False) -> None:
     """
     Checks to see if Kane has sent in a gratitude today. If
     she hasn't, we'll send her a gentle reminder
@@ -49,23 +51,38 @@ def handle_daily_reminder(twilio_client: Client) -> None:
     today = datetime.now().date()
 
     # Send Kane a reminder text if we haven't received a gratitude today
-    if not latest_message_from_kane == today:
+    if not latest_message_from_kane == today or force:
+        logger.info(f"Sending remdiner message")
         send_reminder_text(twilio_client=twilio_client)
+    else:
+        logger.info(f"Last received message @ {latest_message_from_kane}")
 
 
 def send_reminder_text(twilio_client: Client):
-    message_body = """Hi Kane!\n
-It's getting late and it looks like you haven't
-sent in your gratitudes for the day. Respond to this text
-with five things you're grateful for.\n
+    salutations = [
+        "Peace and love",
+        "Elvis and I love you so much",
+        "You're the light of our lives",
+        "I hope you have a great day",
+    ]
+
+    option = random.choice(salutations)
+
+    message_body = f"""Good morning Kane!\n
+Respond to this text with five things you're grateful for.\n
 You can also visit https://grateful-dev-928973048225.us-central1.run.app any time to see
 all the things that have brought you joy lately.\n
-Peace and love,
+{option},
 The Gratitude Robot
     """
 
+    if os.environ.get("PROD") == "true":
+        destination_number = os.environ["KANES_PHONE_NUMBER"]
+    else:
+        destination_number = os.environ["IANS_PHONE_NUMBER"]
+
     twilio_client.messages.create(
-        to=os.environ["KANES_PHONE_NUMBER"],
+        to=destination_number,
         from_=os.environ["TWILIO_PHONE_NUMBER"],
         body=message_body,
     )

@@ -7,5 +7,6 @@ services:
       - .:/app/
     env_file:
       - prod.env
+      - dev.env
     ports:
       - 5000:5000

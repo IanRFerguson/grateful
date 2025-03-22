@@ -1,4 +1,4 @@
-prod.env
+*.env
 *.pyc
 *.ipynb
 
