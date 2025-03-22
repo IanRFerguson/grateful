@@ -1,5 +1,6 @@
-from klondike.bigquery.bigquery import BigQueryConnector
 import os
+
+from klondike.gcp.bigquery import BigQueryConnector
 from utils.logger import logger
 
 ##########
