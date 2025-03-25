@@ -1,6 +1,7 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
+import pytz
 from flask import Flask, redirect, render_template, request, url_for
 from klondike.gcp.bigquery import BigQueryConnector
 from twilio.rest import Client
@@ -112,8 +113,28 @@ def reminder():
     Determines whether or not Kane has sent in her gratitudes today
     """
 
-    NOW = datetime.now()
-    logger.info(f"Sending a gratitude reminder at {NOW}")
+    # Check for DST on the East Coast
+    is_daylight_savings = datetime.now(
+        tz=pytz.timezone("US/Eastern")
+    ).dst() != timedelta(0)
+
+    # Check for "dst" variable in the query string
+    dst_requst = request.args.get("dst")
+
+    """
+    Google Cloud Scheduler can't handle daylight savings calculations flexibly,
+    so we have to infer whether or not it's daylight savings time on the East Coast.
+    
+    This will require two different CRON jobs one hour apart (one with a "dst" variable
+    in the query string)
+    """
+    daylight_savings_conditions = [
+        is_daylight_savings and not dst_requst,
+        dst_requst and not is_daylight_savings,
+    ]
+
+    if any(daylight_savings_conditions):
+        return "Invalid conditions", 201
 
     TWILIO_CLIENT = Client(
         os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"]
@@ -126,7 +147,7 @@ def reminder():
 
     handle_daily_reminder(twilio_client=TWILIO_CLIENT, force=force)
 
-    return "OK"
+    return "OK", 200
 
 
 @api.route("/test", methods=["GET"])
